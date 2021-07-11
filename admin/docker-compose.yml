@@ -1,10 +1,33 @@
- version: '3.8'
- services:  
- backend:
-    build: 
-        context: .
-        dockerfile: Dockerfile    
-    ports:  
-        - 8000:8000
-    volumes:
-        - .:/app  
+version: '3.8'
+services:  
+    backend:
+        build: 
+            context: .
+            dockerfile: Dockerfile    
+        ports:  
+            - 8000:8000
+        volumes:
+            - .:/app    
+        depends_on: # Run everything here first    
+            - db  
+
+    db:  
+        image: mysql/mysql-server:8.0.25-1.2.3-server # This version is for ARM64, can use 5.7.22 instead  
+        # image: mysql/5.7.22    
+        restart: always
+        environment:
+            MYSQL_DATABASE: admin
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: admin
+            MY_SQL_ROOT_PASSWORD: admin  
+        volumes:  
+            - .dbdata:/var/lib/mysql  
+        # image: postgres
+        # volumes:
+        #   - ./data/db:/var/lib/postgresql/data
+        # environment:
+        #   - POSTGRES_DB=postgres
+        #   - POSTGRES_USER=postgres
+        #   - POSTGRES_PASSWORD=postgres
+        ports:
+            - 33066:3306  
