@@ -1,8 +1,10 @@
-from rest_framework import viewsets  
+from rest_framework import viewsets
 from rest_framework.response import Response  
-from rest_framework.serializers import Serializers  
+from rest_framework import status
+from rest_framework.views import APIView
+import random  
 
-from .models import Product  
+from .models import Product, User  
 from .serializers import ProductSerializer  
 
 class ProductViewSet(viewsets.ViewSet): # These 5 methods come with the viewset  
@@ -32,5 +34,13 @@ class ProductViewSet(viewsets.ViewSet): # These 5 methods come with the viewset
     def destroy(self, request, pk=None): # /api/product/<str:id> [DELETE]
         product = Product.objects.get(id=pk)
         product.delete()
-        return Response(tatus=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class UserAPIView(APIView):  
+    def get(self, _):  
+        user = User.objects.all()
+        user = random.choice(user)
+        return Response({
+            id : user.id
+        })
 
