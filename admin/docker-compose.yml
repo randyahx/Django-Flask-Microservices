@@ -11,28 +11,6 @@ services:
     depends_on: # Run everything here first
       - db
 
-<<<<<<< Updated upstream
-    db:
-        image: mysql/mysql-server:8.0.25-1.2.3-server # This version is for ARM64, can use 5.7.22 instead  
-        # image: mysql:5.7.22
-        restart: always
-        environment:
-            MYSQL_DATABASE: admin
-            MYSQL_USER: root
-            MYSQL_PASSWORD: root
-            MYSQL_ROOT_PASSWORD: root
-        volumes:
-            - .dbdata:/var/lib/mysql
-        # image: postgres
-        # volumes:
-        #   - ./data/db:/var/lib/postgresql/data
-        # environment:
-        #   - POSTGRES_DB=postgres
-        #   - POSTGRES_USER=postgres
-        #   - POSTGRES_PASSWORD=postgres
-        ports:
-            - 33066:3306
-=======
   db:
     # image: mysql/mysql-server:8.0.25-1.2.3-server # This version is for ARM64, can use 5.7.22 instead
     image: mysql:5.7.22
@@ -53,4 +31,3 @@ services:
     #   - POSTGRES_PASSWORD=postgres
     ports:
       - 33066:3306
->>>>>>> Stashed changes
