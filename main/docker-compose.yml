@@ -12,15 +12,15 @@ services:
             - db  
 
     db:  
-        image: mysql/mysql-server:8.0.25-1.2.3-server # This version is for ARM64, can use 5.7.22 instead  
-        # image: mysql/5.7.22    
+        # image: mysql/mysql-server:8.0.25-1.2.3-server # This version is for ARM64, can use 5.7.22 instead  
+        image: mysql/5.7.22    
         restart: always
         environment:
-            MYSQL_DATABASE: admin
-            MYSQL_USER: admin
-            MYSQL_PASSWORD: admin
-            MY_SQL_ROOT_PASSWORD: admin  
+            MYSQL_DATABASE: main
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+            MY_SQL_ROOT_PASSWORD: root
         volumes:  
-            - .dbdata:/var/lib/mysql  
+            - .dbdata:/var/lib/mysql
         ports:
             - 33067:3306  
