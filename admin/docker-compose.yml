@@ -12,14 +12,13 @@ services:
     depends_on: # Run everything here first
       - db
 
-  # queue:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   command:
-  #     'python consumer.py'
-  #   depends_on:
-  #       - db
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "python consumer.py"
+    depends_on:
+      - db
 
   db:
     # image: mysql/mysql-server:8.0.25-1.2.3-server # This version is for ARM64, can use 5.7.22 instead
