@@ -1,8 +1,12 @@
-from flask import Flask
+from flask import Flask, jsonify, abort      
 from flask_migrate import Migrate    
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy  
 from sqlalchemy import UniqueConstraint
+import requests
+from dataclasses import dataclass
+from .producer import publish
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@db/main'  
@@ -13,12 +17,18 @@ CORS(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-class Product(db.Model):  
+@dataclass # Serializer  
+class Product(db.Model): # Model  
+    id: int        # Dataclass type   
+    title: str
+    image: str  
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     image = db.Column(db.String(200))
 
-class ProductUser(db.Model):
+@dataclass # Serializer  
+class ProductUser(db.Model): # Model    
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
     product_id = db.Column(db.Integer)
@@ -27,9 +37,29 @@ class ProductUser(db.Model):
 
 #######################################################################  
 
-@app.route('/')
+@app.route('/api/product')
 def index():
-    return "Hello"
+    return jsonify(Product.query.all())
+
+@app.route('/api/product/<int:id>/like', methods=["POST"])
+def like(id):
+    req = requests.get('http://localhost:8000/api/user')
+    # req = requests.get('http://docker.for.mac.localhost:8000/api/user')
+    json = req.json()
+
+    try:
+        productser = ProductUser(user_id=json['id'], product_id=id)
+        db.session.add(productUser)
+        db.session.commit()
+
+        publish('product_liked', id)
+    except:
+        abort(400, 'You have already liked this product')
+        
+    return jsonify({
+        'message': 'success'
+    })
+        
 
 if __name__ == "__main__":  
     app.run(debug=True, host='0.0.0.0')
