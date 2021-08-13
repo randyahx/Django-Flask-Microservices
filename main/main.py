@@ -48,7 +48,7 @@ def like(id):
     json = req.json()
 
     try:
-        productser = ProductUser(user_id=json['id'], product_id=id)
+        productUser = ProductUser(user_id=json['id'], product_id=id)
         db.session.add(productUser)
         db.session.commit()
 
